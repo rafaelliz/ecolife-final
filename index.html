@@ -136,6 +136,41 @@ ul{padding-left:20px;margin:6px 0}li{margin:5px 0}li::marker{color:var(--pr)}
   background:var(--card);
   color:var(--tx);
 }
+/* Menu dropdown kustom dengan transisi */
+.f .select-ui{position:relative;width:100%;z-index:2}
+.f .select-ui.is-open{z-index:20}
+.f select.select-native{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.f .select-trigger{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:56px;padding:14px 18px;border:1px solid color-mix(in srgb,var(--pr) 42%,var(--bd));border-radius:16px;background:color-mix(in srgb,var(--bg) 82%,var(--card));color:var(--tx);font:inherit;font-weight:600;text-align:left;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s,background-color .2s}
+.f .select-trigger:hover{transform:translateY(-2px);border-color:var(--pr);background:var(--card)}
+.f .select-trigger:focus-visible{outline:0;box-shadow:0 0 0 4px var(--ring)}
+.f .select-trigger svg{width:16px;height:16px;flex:none;color:var(--mu);transition:transform .22s ease}
+.f .select-ui.is-open .select-trigger svg{transform:rotate(180deg)}
+.f .select-menu{position:absolute;top:calc(100% + 8px);left:0;right:0;max-height:0;overflow:auto;padding:0 6px;border:1px solid var(--bd);border-radius:14px;background:var(--card);box-shadow:var(--sh2);opacity:0;transform:translateY(-8px) scale(.98);transform-origin:top center;transition:max-height .24s ease,opacity .18s ease,transform .22s cubic-bezier(.2,.8,.2,1),padding .2s;scrollbar-width:thin;scrollbar-color:var(--bd) transparent}
+.f .select-ui.is-open .select-menu{max-height:260px;padding:6px;opacity:1;transform:translateY(0) scale(1)}
+.f .select-option{display:block;width:100%;padding:9px 12px;border:0;border-radius:9px;background:transparent;color:var(--tx);font:inherit;text-align:left;cursor:pointer;transition:background .15s,color .15s,transform .15s}
+.f .select-option:hover,.f .select-option:focus-visible{outline:0;background:var(--pr2);color:var(--pt);transform:translateX(3px)}
+.f .select-option[aria-selected="true"]{background:var(--pr);color:#fff;font-weight:700}
+.f .select-trigger.value-changed{animation:pilihan-pop .38s cubic-bezier(.2,.8,.2,1)}
+@media(prefers-reduced-motion:reduce){.f .select-trigger,.f .select-trigger svg,.f .select-menu,.f .select-option{transition:none!important;animation:none!important}.f .select-trigger:hover,.f .select-option:hover{transform:none}}
+
+/* Animasi interaksi dropdown pilihan */
+@keyframes pilihan-pop{
+  0%{transform:scale(1);box-shadow:0 0 0 0 var(--ring)}
+  45%{transform:scale(1.025);box-shadow:0 0 0 6px var(--ring)}
+  100%{transform:scale(1);box-shadow:0 0 0 0 transparent}
+}
+.f select[data-k="Diet"],.f select[data-k="Heating Energy Source"],.f select[data-k="Energy efficiency"],.f select[data-k="Waste Bag Size"],.f select[data-k="Vehicle Type"],.f select[data-k="Frequency of Traveling by Air"],.f select[data-k="Transport"]{
+  transform-origin:center;
+  will-change:transform;
+}
+.f select[data-k="Diet"]:hover,.f select[data-k="Heating Energy Source"]:hover,.f select[data-k="Energy efficiency"]:hover,.f select[data-k="Waste Bag Size"]:hover,.f select[data-k="Vehicle Type"]:hover,.f select[data-k="Frequency of Traveling by Air"]:hover,.f select[data-k="Transport"]:hover{
+  transform:translateY(-2px);
+}
+.f select.pilihan-berubah{animation:pilihan-pop .42s cubic-bezier(.2,.8,.2,1)}
+@media(prefers-reduced-motion:reduce){
+  .f select[data-k="Diet"],.f select[data-k="Heating Energy Source"],.f select[data-k="Energy efficiency"],.f select[data-k="Waste Bag Size"],.f select[data-k="Vehicle Type"],.f select[data-k="Frequency of Traveling by Air"],.f select[data-k="Transport"]{transition:none;transform:none}
+  .f select.pilihan-berubah{animation:none}
+}
 .ck{display:flex;flex-wrap:wrap;gap:10px}
 .ck label{display:flex;gap:8px;align-items:center;color:var(--tx);font-size:.93rem;font-weight:600;margin:0;padding:9px 16px;border:1px solid var(--bd);border-radius:999px;background:var(--bg);cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
 .ck label:hover{border-color:var(--pr)}.ck label:active{transform:scale(.96)}
@@ -726,8 +761,43 @@ const main=["Diet","Transport","Vehicle Type","Frequency of Traveling by Air","W
       const sel=k=>`<div class="f"><label for="s${k.replace(/\W/g,"")}">${SEL[k][0]}</label><select id="s${k.replace(/\W/g,"")}" data-k="${k}">${Object.entries(SEL[k][1]).map(([v,t])=>`<option value="${v}"${v===SEL[k][2]?" selected":""}>${t}</option>`).join("")}</select></div>`;
       const num=k=>`<div class="f"><label for="n${k.replace(/\W/g,"")}">${NUM[k][0]}</label><input id="n${k.replace(/\W/g,"")}" type="number" data-k="${k}" value="${NUM[k][1]}" min="${NUM[k][2]}" max="${NUM[k][3]}"></div>`;
       const ck=(t,pre,items)=>`<div class="f" style="grid-column:1/-1"><label>${t}</label><div class="ck">${items.map(i=>`<label><input type="checkbox" data-k="${pre}_${i[0]}">${i[1]}</label>`).join("")}</div></div>`;
-      const fillForm=()=>{$("#ff").innerHTML=main.map(sel).join("")+mnum.map(num).join("")+ck("Jenis sampah yang kamu daur ulang","Recycle",[["Glass","Kaca"],["Metal","Logam"],["Paper","Kertas"],["Plastic","Plastik"]])};
+      function enhanceSelects(){
+        const host=$("#ff");
+        host.querySelectorAll(".f select[data-k]").forEach(select=>{
+          if(select.dataset.enhanced)return;
+          select.dataset.enhanced="true";select.classList.add("select-native");
+          const box=document.createElement("div");box.className="select-ui";
+          select.parentNode.insertBefore(box,select);box.appendChild(select);
+          const trigger=document.createElement("button");trigger.type="button";trigger.className="select-trigger";trigger.setAttribute("aria-haspopup","listbox");trigger.setAttribute("aria-expanded","false");
+          const value=document.createElement("span"),arrow=document.createElementNS("http://www.w3.org/2000/svg","svg");
+          arrow.setAttribute("viewBox","0 0 24 24");arrow.setAttribute("fill","none");arrow.setAttribute("stroke","currentColor");arrow.setAttribute("stroke-width","2.5");arrow.setAttribute("stroke-linecap","round");arrow.setAttribute("stroke-linejoin","round");arrow.innerHTML="<path d=\"m6 9 6 6 6-6\"/>";
+          trigger.append(value,arrow);box.appendChild(trigger);
+          const menu=document.createElement("div");menu.className="select-menu";menu.setAttribute("role","listbox");menu.id="menu-"+select.id;trigger.setAttribute("aria-controls",menu.id);box.appendChild(menu);
+          const buttons=[];
+          [...select.options].forEach((opt,index)=>{const item=document.createElement("button");item.type="button";item.className="select-option";item.setAttribute("role","option");item.textContent=opt.textContent;item.dataset.value=opt.value;item.tabIndex=-1;menu.appendChild(item);buttons.push(item);
+            item.addEventListener("click",()=>{select.value=opt.value;value.textContent=opt.textContent;buttons.forEach(b=>b.setAttribute("aria-selected",String(b===item)));select.dispatchEvent(new Event("change",{bubbles:true}));close();trigger.classList.remove("value-changed");void trigger.offsetWidth;trigger.classList.add("value-changed");setTimeout(()=>trigger.classList.remove("value-changed"),420);trigger.focus()});
+          });
+          const close=()=>{box.classList.remove("is-open");trigger.setAttribute("aria-expanded","false")};
+          const open=()=>{host.querySelectorAll(".select-ui.is-open").forEach(other=>{other.classList.remove("is-open");other.querySelector(".select-trigger").setAttribute("aria-expanded","false")});box.classList.add("is-open");trigger.setAttribute("aria-expanded","true");const selected=buttons.findIndex(b=>b.dataset.value===select.value);buttons.forEach((b,i)=>b.setAttribute("aria-selected",String(i===selected)));};
+          const sync=()=>{const opt=select.options[select.selectedIndex];value.textContent=opt?opt.textContent:"Pilih";buttons.forEach(b=>b.setAttribute("aria-selected",String(b.dataset.value===select.value)))};
+          trigger.addEventListener("click",()=>box.classList.contains("is-open")?close():open());
+          trigger.addEventListener("keydown",e=>{if(e.key==="ArrowDown"||e.key==="Enter"||e.key===" "){e.preventDefault();open();const i=Math.max(0,buttons.findIndex(b=>b.dataset.value===select.value));buttons[i]?.focus()} });
+          menu.addEventListener("keydown",e=>{const i=buttons.indexOf(document.activeElement);if(e.key==="Escape"){e.preventDefault();close();trigger.focus()}else if(e.key==="ArrowDown"){e.preventDefault();buttons[Math.min(buttons.length-1,i+1)]?.focus()}else if(e.key==="ArrowUp"){e.preventDefault();buttons[Math.max(0,i-1)]?.focus()}else if(e.key==="Tab")close()});
+          select.addEventListener("change",sync);sync();
+        });
+      }
+      document.addEventListener("click",e=>{if(!e.target.closest(".select-ui"))$("#ff")?.querySelectorAll(".select-ui.is-open").forEach(box=>{box.classList.remove("is-open");box.querySelector(".select-trigger").setAttribute("aria-expanded","false")})});
+      const fillForm=()=>{$("#ff").innerHTML=main.map(sel).join("")+mnum.map(num).join("")+ck("Jenis sampah yang kamu daur ulang","Recycle",[["Glass","Kaca"],["Metal","Logam"],["Paper","Kertas"],["Plastic","Plastik"]]);enhanceSelects()};
       fillForm();
+      /* Beri umpan balik animasi setiap kali pilihan dropdown berubah. */
+      $("#ff").addEventListener("change",e=>{
+        const el=e.target;
+        if(!el.matches(".f select[data-k]"))return;
+        el.classList.remove("pilihan-berubah");
+        void el.offsetWidth;
+        el.classList.add("pilihan-berubah");
+        setTimeout(()=>el.classList.remove("pilihan-berubah"),450);
+      });
       $("#rp").onclick=()=>{fillForm();$("#out").style.display="none";toast("Form dikembalikan ke nilai awal.")};
       function drawH(H){$("#pb2").innerHTML=H.length?H.map((x,i)=>`<tr><td>${i+1}</td><td><b style="color:${COL[x.c]}">${x.c}</b></td><td>${x.Tinggi}%</td><td>${x.Sedang}%</td><td>${x.Rendah}%</td><td>${fmt(x.t)}</td></tr>`).join(""):'<tr><td colspan="6" class="note">Belum ada riwayat prediksi.</td></tr>'}
       $("#go").onclick=run(async()=>{const v={};
