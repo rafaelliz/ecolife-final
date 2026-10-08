@@ -88,6 +88,54 @@ ul{padding-left:20px;margin:6px 0}li{margin:5px 0}li::marker{color:var(--pr)}
 .f select{appearance:none;-webkit-appearance:none;padding-right:40px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2352695e' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
 .f select:hover,.f input[type=number]:hover{border-color:var(--pr)}
 .f select:focus,.f input[type=number]:focus{outline:0;border-color:var(--pr);box-shadow:0 0 0 4px var(--ring)}
+/* Select khusus pada pilihan kebiasaan utama */
+.f select[data-k="Diet"],
+.f select[data-k="Heating Energy Source"],
+.f select[data-k="Energy efficiency"],
+.f select[data-k="Waste Bag Size"],
+.f select[data-k="Vehicle Type"],
+.f select[data-k="Frequency of Traveling by Air"],
+.f select[data-k="Transport"]{
+  min-height:56px;
+  padding:14px 44px 14px 18px;
+  border:1px solid color-mix(in srgb,var(--pr) 42%,var(--bd));
+  border-radius:16px;
+  background-color:color-mix(in srgb,var(--bg) 82%,var(--card));
+  color:var(--tx);
+  font-weight:600;
+  transition:border-color .2s,box-shadow .2s,background-color .2s,transform .2s;
+}
+.f select[data-k="Diet"]:hover,
+.f select[data-k="Heating Energy Source"]:hover,
+.f select[data-k="Energy efficiency"]:hover,
+.f select[data-k="Waste Bag Size"]:hover,
+.f select[data-k="Vehicle Type"]:hover,
+.f select[data-k="Frequency of Traveling by Air"]:hover,
+.f select[data-k="Transport"]:hover{
+  border-color:var(--pr);
+  background-color:var(--card);
+}
+.f select[data-k="Diet"]:focus,
+.f select[data-k="Heating Energy Source"]:focus,
+.f select[data-k="Energy efficiency"]:focus,
+.f select[data-k="Waste Bag Size"]:focus,
+.f select[data-k="Vehicle Type"]:focus,
+.f select[data-k="Frequency of Traveling by Air"]:focus,
+.f select[data-k="Transport"]:focus{
+  outline:0;
+  border-color:var(--pr);
+  box-shadow:0 0 0 4px var(--ring);
+}
+.f select[data-k="Diet"] option,
+.f select[data-k="Heating Energy Source"] option,
+.f select[data-k="Energy efficiency"] option,
+.f select[data-k="Waste Bag Size"] option,
+.f select[data-k="Vehicle Type"] option,
+.f select[data-k="Frequency of Traveling by Air"] option,
+.f select[data-k="Transport"] option{
+  background:var(--card);
+  color:var(--tx);
+}
 .ck{display:flex;flex-wrap:wrap;gap:10px}
 .ck label{display:flex;gap:8px;align-items:center;color:var(--tx);font-size:.93rem;font-weight:600;margin:0;padding:9px 16px;border:1px solid var(--bd);border-radius:999px;background:var(--bg);cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
 .ck label:hover{border-color:var(--pr)}.ck label:active{transform:scale(.96)}
